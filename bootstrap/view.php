@@ -12,15 +12,15 @@ function renderHeader() {?>
             </div>
 
             <nav class="header-nav">
-               <a href="/" class="nav-link">Главное меню</a>
-               <a href="/lore" class="nav-link">Лор города</a>
-               <a href="/fractions" class="nav-link">Фракции и правила</a>
-               <a href="/professions" class="nav-link">Профессии</a>
-               <a href="/map" class="nav-link">Карта города</a>
-               <a href="/news" class="nav-link">Новости</a>
-               <a href="/changes" class="nav-link">Изменения</a>
-               <a href="/forum" class="nav-link">Форум</a>
-            </nav>
+                <a href="/" class="nav-link">Главное меню</a>
+                <a href="/lore" class="nav-link">Лор города</a>
+                <a href="/fractions" class="nav-link">Фракции и правила</a>
+                <a href="/professions" class="nav-link">Профессии</a>
+                <a href="/map" class="nav-link">Карта города</a>
+                <a href="/news" class="nav-link">Новости</a>
+                <a href="/changes" class="nav-link">Изменения</a>
+                <a href="/forum" class="nav-link">Форум</a>
+           </nav>
 
             <div class="header-right">
                 <div class="theme-toggle-box"></div>

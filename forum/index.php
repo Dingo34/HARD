@@ -1,12 +1,16 @@
+<?php
+require_once '../bootstrap/view.php';
+?>
 <!DOCTYPE html>
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Форум — HARD Roleplay</title>
-<link rel="icon" type="image/png" href="logo.png?v=1">
-<link rel="stylesheet" href="pages.css">
-<link rel="stylesheet" href="toggle.css">
+<link rel="icon" type="image/png" href="/logo.png?v=1">
+<link rel="stylesheet" href="/pages.css">
+<link rel="stylesheet" href="/toggle.css">
+<link rel="stylesheet" href="/css/login.css">
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
 <style>
 :root{
@@ -23,41 +27,13 @@ body.light-theme{
     --fr-stat:#777; --fr-stat-b:#1a1a1a;
     --fr-last-name:#e21d2f; --fr-last-meta:#888; --fr-empty:#999;
 }
-
-.forum{
-    width:100%;
-    background:var(--fr-bg);
-    border:1px solid var(--fr-border);
-    border-radius:10px;
-    overflow:hidden;
-    font-family:'Montserrat',Arial,sans-serif;
-    color:var(--fr-text);
-    transition:background .35s ease, border-color .35s ease, color .35s ease;
-    margin-top:20px;
-}
-.forum-cat{
-    background:var(--fr-cat-bg);border-bottom:1px solid var(--fr-cat-border);
-    padding:16px 22px;font-size:13px;font-weight:700;
-    letter-spacing:.18em;text-transform:uppercase;color:#e21d2f;
-    display:flex;align-items:center;gap:10px;
-    transition:background .35s ease, border-color .35s ease;
-}
+.forum{ width:100%;background:var(--fr-bg);border:1px solid var(--fr-border);border-radius:10px;overflow:hidden;font-family:'Montserrat',Arial,sans-serif;color:var(--fr-text);transition:background .35s ease, border-color .35s ease, color .35s ease;margin-top:20px; }
+.forum-cat{ background:var(--fr-cat-bg);border-bottom:1px solid var(--fr-cat-border);padding:16px 22px;font-size:13px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:#e21d2f;display:flex;align-items:center;gap:10px;transition:background .35s ease, border-color .35s ease; }
 .forum-cat::before{ content:"";width:4px;height:16px;background:#e21d2f;border-radius:2px; }
-.forum-row{
-    display:grid;grid-template-columns:56px 1fr auto 240px;
-    align-items:center;gap:18px;padding:16px 22px;
-    border-bottom:1px solid var(--fr-row-border);
-    text-decoration:none;color:inherit;background:var(--fr-row-bg);
-    transition:background .15s ease, border-color .35s ease;
-}
+.forum-row{ display:grid;grid-template-columns:56px 1fr auto 240px;align-items:center;gap:18px;padding:16px 22px;border-bottom:1px solid var(--fr-row-border);text-decoration:none;color:inherit;background:var(--fr-row-bg);transition:background .15s ease, border-color .35s ease; }
 .forum-row:last-child{ border-bottom:none; }
 .forum-row:hover{ background:var(--fr-row-hover); }
-.forum-icon{
-    width:44px;height:44px;border-radius:10px;
-    background:linear-gradient(135deg,#e21d2f,#8a0f1c);
-    display:flex;align-items:center;justify-content:center;flex-shrink:0;
-    box-shadow:0 4px 12px rgba(226,29,47,.25);
-}
+.forum-icon{ width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,#e21d2f,#8a0f1c);display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 4px 12px rgba(226,29,47,.25); }
 .forum-icon svg{ width:22px;height:22px;fill:#fff; }
 .forum-title{ font-size:15px;font-weight:700;color:var(--fr-title);transition:color .35s ease; }
 .forum-desc{ font-size:12px;color:var(--fr-desc);margin-top:4px;line-height:1.5;transition:color .35s ease; }
@@ -80,28 +56,7 @@ body.light-theme{
 <div class="main-bg"></div>
 <div class="main-bg-overlay"></div>
 
-<header class="main-header">
-<a href="index.html" class="header-left">
-<img src="logo.png" alt="HARD Roleplay" class="header-logo">
-<div class="header-brand">
-<span class="brand-hard">HARD</span><span class="brand-divider">|</span><span class="brand-houston">HOUSTON</span>
-</div>
-</a>
-<nav class="header-nav">
-<a href="index.html#main" class="nav-link">Главное меню</a>
-<a href="lore.html" class="nav-link">Лор города</a>
-<a href="fractions.html" class="nav-link">Фракции и правила</a>
-<a href="professions.html" class="nav-link">Профессии</a>
-<a href="map.html" class="nav-link">Карта города</a>
-<a href="news.html" class="nav-link">Новости</a>
-<a href="changes.html" class="nav-link">Изменения</a>
-<a href="forum.html" class="nav-link active">Форум</a>
-</nav>
-<div class="header-right">
-<div class="theme-toggle-box"></div>
-<button type="button" class="btn-login" id="header-login-btn">ВОЙТИ</button>
-</div>
-</header>
+<?php renderHeader(); ?>
 
 <div class="page-container">
     <div class="page-label">07 / ФОРУМ</div>
@@ -117,7 +72,10 @@ body.light-theme{
     <div class="footer-brand"><span>HARD</span><span class="footer-divider">|</span><span>HOUSTON</span></div>
 </footer>
 
-<script src="toggle.js"></script>
+<?php renderLogin(); ?>
+
+<script src="/toggle.js"></script>
+<script src="/js/login.js"></script>
 
 <script id="forum-data" type="application/json">
 [
@@ -132,7 +90,6 @@ body.light-theme{
 <script>
 (function(){
 "use strict";
-
 var ICONS = {
   player:'<svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M12 14c-4.4 0-8 2.2-8 5v1h16v-1c0-2.8-3.6-5-8-5z"/></svg>',
   admin:'<svg viewBox="0 0 24 24"><path d="M12 1 3 5v6c0 5.5 3.8 10.7 9 12 5.2-1.3 9-6.5 9-12V5l-9-4zm0 6.2 1.3 2.7 2.9.4-2.1 2 .5 2.9-2.6-1.4-2.6 1.4.5-2.9-2.1-2 2.9-.4L12 7.2z"/></svg>',
@@ -144,18 +101,15 @@ var STORAGE_KEY='hh_forum_threads';
 function loadThreads(){try{return JSON.parse(localStorage.getItem(STORAGE_KEY))||{};}catch(e){return{};}}
 function formatCount(n){if(n>=1000)return(n/1000).toFixed(1).replace('.',',')+'К';return String(n);}
 function esc(s){return String(s).replace(/[&<>"']/g,function(c){return({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c];});}
-
 var data=JSON.parse(document.getElementById('forum-data').textContent);
 var threads=loadThreads();
 var root=document.getElementById('forum');
 var html='';var currentCat=null;
-
 data.forEach(function(item){
     if(item.cat!==currentCat){currentCat=item.cat;html+='<div class="forum-cat">'+esc(currentCat)+'</div>';}
     var list=threads[item.id]||[];
     var topicsCount=list.length;
     var messagesCount=list.reduce(function(s,t){return s+1+(t.replies?t.replies.length:0);},0);
-
     var lastBlock;
     if(list.length){
         var last=list[list.length-1];
@@ -169,8 +123,7 @@ data.forEach(function(item){
             '<div class="meta">Пока нет тем</div>'+
         '</div></div>';
     }
-
-    html+='<a class="forum-row" href="forum-topic.html?id='+encodeURIComponent(item.id)+'">'+
+    html+='<a class="forum-row" href="/forum/topic.php?id='+encodeURIComponent(item.id)+'">'+
       '<div class="forum-icon">'+ICONS[item.iconKey]+'</div>'+
       '<div class="forum-main"><div class="forum-title">'+esc(item.title)+'</div><div class="forum-desc">'+esc(item.desc)+'</div></div>'+
       '<div class="forum-stats"><span><b>'+formatCount(topicsCount)+'</b>Тем</span><span><b>'+formatCount(messagesCount)+'</b>Сообщений</span></div>'+
