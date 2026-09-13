@@ -1,12 +1,16 @@
+<?php
+require_once '../bootstrap/view.php';
+?>
 <!DOCTYPE html>
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Раздел — HARD Roleplay</title>
-<link rel="icon" type="image/png" href="logo.png?v=1">
-<link rel="stylesheet" href="pages.css">
-<link rel="stylesheet" href="toggle.css">
+<link rel="icon" type="image/png" href="/logo.png?v=1">
+<link rel="stylesheet" href="/pages.css">
+<link rel="stylesheet" href="/toggle.css">
+<link rel="stylesheet" href="/css/login.css">
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
 <style>
 :root{
@@ -16,10 +20,6 @@
     --ft-list-bg:#101010; --ft-list-border:#2a2a2a; --ft-item-border:#1f1f1f;
     --ft-item-title:#fff; --ft-item-meta:#666; --ft-item-fields:#9a9a9a; --ft-item-fields-b:#cfcfcf;
     --ft-item-reply:#9a9a9a; --ft-item-reply-b:#e21d2f; --ft-empty-text:#666;
-
-    --am-bg:#1e1e1e; --am-border:#2a2a2a; --am-text:#e9e9e9; --am-text-muted:#888; --am-title:#fff;
-    --am-tab-border:#2f2f2f; --am-input-bg:#141414; --am-input-border:#2f2f2f; --am-placeholder:#666;
-    --am-divider:#2f2f2f; --am-note:#666;
 }
 body.light-theme{
     --ft-text:#1a1a1a; --ft-title:#1a1a1a; --ft-desc:#777; --ft-head-bg:#f5f5f5; --ft-head-border:#dcdcdc;
@@ -28,12 +28,7 @@ body.light-theme{
     --ft-list-bg:#fff; --ft-list-border:#dcdcdc; --ft-item-border:#e5e5e5;
     --ft-item-title:#1a1a1a; --ft-item-meta:#888; --ft-item-fields:#555; --ft-item-fields-b:#1a1a1a;
     --ft-item-reply:#555; --ft-item-reply-b:#e21d2f; --ft-empty-text:#999;
-
-    --am-bg:#fff; --am-border:#dcdcdc; --am-text:#1a1a1a; --am-text-muted:#777; --am-title:#1a1a1a;
-    --am-tab-border:#dcdcdc; --am-input-bg:#f5f5f5; --am-input-border:#d5d5d5; --am-placeholder:#888;
-    --am-divider:#dcdcdc; --am-note:#999;
 }
-
 .topic-page{ width:100%;display:flex;justify-content:center;padding:40px 20px 60px;box-sizing:border-box; }
 .topic-page .topic{ width:min(1100px,96vw);font-family:'Montserrat',Arial,sans-serif;color:var(--ft-text);transition:color .35s ease; }
 .topic-page .topic-back{ display:inline-flex;align-items:center;gap:8px;color:var(--ft-desc);text-decoration:none;font-size:12px;margin-bottom:16px;transition:color .15s; }
@@ -71,85 +66,17 @@ body.light-theme{
 .topic-page .ti-reply{ font-size:12px;color:var(--ft-item-reply);margin-bottom:8px;transition:color .35s ease; }
 .topic-page .ti-reply b{ color:var(--ft-item-reply-b); }
 .topic-page .topic-empty{ padding:30px;text-align:center;color:var(--ft-empty-text);font-size:13px;transition:color .35s ease; }
-
-.auth-backdrop{ position:fixed;inset:0;background:rgba(0,0,0,.75);display:none;align-items:center;justify-content:center;z-index:9999;padding:20px;backdrop-filter:blur(3px); }
-.auth-backdrop.open{ display:flex; }
-.auth-modal{ background:var(--am-bg);border:1px solid var(--am-border);border-radius:14px;width:min(440px,100%);font-family:'Montserrat',Arial,sans-serif;color:var(--am-text);box-shadow:0 25px 60px rgba(0,0,0,.55);position:relative;overflow:hidden;max-height:90vh;display:flex;flex-direction:column;transition:background .35s ease,border-color .35s ease,color .35s ease; }
-.auth-close{ position:absolute;top:14px;right:18px;background:none;border:none;color:var(--am-text-muted);font-size:22px;line-height:1;cursor:pointer;padding:4px;transition:color .15s;z-index:2; }
-.auth-close:hover{ color:#e21d2f; }
-.auth-tabs{ display:flex;padding:24px 24px 0;gap:26px;border-bottom:1px solid var(--am-tab-border);flex-shrink:0;transition:border-color .35s ease; }
-.auth-tab{ background:none;border:none;color:var(--am-text-muted);font-family:inherit;font-weight:700;font-size:13px;letter-spacing:.08em;padding:0 0 14px;cursor:pointer;position:relative;text-transform:uppercase;transition:color .35s ease; }
-.auth-tab.active{ color:#e21d2f; }
-.auth-tab.active::after{ content:"";position:absolute;left:0;right:0;bottom:-1px;height:2px;background:#e21d2f; }
-.auth-body{ padding:24px;overflow-y:auto; }
-.auth-title{ margin:0 0 22px;font-size:20px;font-weight:900;color:var(--am-title);transition:color .35s ease; }
-.auth-field{ margin-bottom:12px; }
-.auth-field input{ width:100%;box-sizing:border-box;background:var(--am-input-bg);border:1px solid var(--am-input-border);color:var(--am-text);padding:13px 16px;border-radius:8px;font-family:inherit;font-size:14px;outline:none;transition:background .35s ease,border-color .35s ease,color .35s ease; }
-.auth-field input::placeholder{ color:var(--am-placeholder); }
-.auth-field input:focus{ border-color:#e21d2f; }
-.auth-error{ color:#e21d2f;font-size:12px;margin:6px 0 12px;display:none; }
-.auth-submit{ width:100%;background:#e21d2f;color:#fff;border:none;padding:14px;border-radius:8px;font-family:inherit;font-weight:900;font-size:14px;letter-spacing:.08em;cursor:pointer;text-transform:uppercase;margin-top:4px; }
-.auth-submit:hover{ background:#ff2a3d; }
-
-.pass-field{ position:relative; }
-.pass-field input.has-eye{ padding-right:46px !important; }
-.pass-icon-btn{ position:absolute;top:50%;transform:translateY(-50%);right:6px;width:34px;height:34px;background:transparent;border:none;border-radius:6px;color:var(--am-text-muted);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .15s,color .15s;padding:0; }
-.pass-icon-btn:hover{ color:#e21d2f;background:rgba(226,29,47,.1); }
-.pass-icon-btn:active{ transform:translateY(-50%) scale(.92); }
-.pass-icon-btn svg{ width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round; }
-
-.auth-divider{ display:flex;align-items:center;gap:12px;margin:18px 0 14px;color:var(--am-text-muted);font-size:11px;letter-spacing:.15em;font-weight:700;transition:color .35s ease; }
-.auth-divider::before,
-.auth-divider::after{ content:"";flex:1;height:1px;background:var(--am-divider);transition:background .35s ease; }
-
-.auth-steam{
-    width:100%;background:#171a21;color:#fff;
-    border:1px solid #2a3b52;padding:13px;border-radius:8px;
-    font-family:inherit;font-weight:700;font-size:13px;
-    letter-spacing:.05em;cursor:pointer;
-    display:flex;align-items:center;justify-content:center;gap:10px;
-    line-height:1;transition:background .15s ease;
-}
-.auth-steam:hover{ background:#1f2630; }
-.auth-steam .steam-icon{ width:22px;height:22px;object-fit:contain;flex-shrink:0;display:block; }
-
-.auth-note{ text-align:center;color:var(--am-note);font-size:11px;margin-top:14px;line-height:1.5;transition:color .35s ease; }
-.auth-register-fields{ display:none; }
-.auth-login-fields{ display:block; }
-.auth-modal.mode-register .auth-register-fields{ display:block; }
-.auth-modal.mode-register .auth-login-fields{ display:none; }
 </style>
 </head>
 <body>
 <div class="main-bg"></div>
 <div class="main-bg-overlay"></div>
 
-<header class="main-header">
-<a href="index.html" class="header-left">
-<img src="logo.png" alt="HARD Roleplay" class="header-logo">
-<div class="header-brand">
-<span class="brand-hard">HARD</span><span class="brand-divider">|</span><span class="brand-houston">HOUSTON</span>
-</div>
-</a>
-<nav class="header-nav">
-<a href="index.html#main" class="nav-link">Главное меню</a>
-<a href="lore.html" class="nav-link">Лор города</a>
-<a href="fractions.html" class="nav-link">Фракции и правила</a>
-<a href="professions.html" class="nav-link">Профессии</a>
-<a href="map.html" class="nav-link">Карта города</a>
-<a href="news.html" class="nav-link">Новости</a>
-<a href="changes.html" class="nav-link">Изменения</a>
-<a href="forum.html" class="nav-link active">Форум</a>
-</nav>
-<div class="header-right">
-<div class="theme-toggle-box"></div>
-<button type="button" class="btn-login" id="header-login-btn">ВОЙТИ</button>
-</div>
-</header>
+<?php renderHeader(); ?>
 
 <div class="topic-page">
 <div class="topic">
-<a href="forum.html" class="topic-back">
+<a href="/forum" class="topic-back">
 <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg>
 Назад к форуму
 </a>
@@ -165,7 +92,7 @@ body.light-theme{
 
 <div class="login-hint" id="login-hint" style="display:none;">
 <span>Чтобы создать тему, войдите в аккаунт.</span>
-<button id="open-login">ВОЙТИ</button>
+<button id="open-login-hint">ВОЙТИ</button>
 </div>
 
 <div class="topic-form" id="topic-form">
@@ -184,66 +111,10 @@ body.light-theme{
 <div class="footer-brand"><span>HARD</span><span class="footer-divider">|</span><span>HOUSTON</span></div>
 </footer>
 
-<div class="auth-backdrop" id="auth-modal">
-<div class="auth-modal" id="auth-modal-box">
-<button class="auth-close" id="auth-close">×</button>
-<div class="auth-tabs">
-<button class="auth-tab active" id="tab-login">Вход</button>
-<button class="auth-tab" id="tab-register">Регистрация</button>
-</div>
-<div class="auth-body">
-<h2 class="auth-title" id="auth-title">Вход в аккаунт</h2>
-<form id="auth-form">
+<?php renderLogin(); ?>
 
-<div class="auth-login-fields">
-  <div class="auth-field"><input type="text" id="login-nick" placeholder="Логин или Email"></div>
-  <div class="auth-field pass-field">
-    <input type="password" id="login-pass" placeholder="Пароль" class="has-eye">
-    <button type="button" class="pass-icon-btn" data-eye-for="login-pass" title="Показать пароль">
-      <svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8S1 12 1 12z"></path><circle cx="12" cy="12" r="3"></circle></svg>
-    </button>
-  </div>
-  <div class="auth-error" id="auth-error"></div>
-  <button type="submit" class="auth-submit" id="auth-submit">Войти</button>
-  <div class="auth-divider">ИЛИ</div>
-  <button type="button" class="auth-steam" id="steam-login">
-    <img src="Steam.png" alt="Steam" class="steam-icon">
-    Войти через Steam
-  </button>
-</div>
-
-<div class="auth-register-fields">
-  <div class="auth-field"><input type="text" id="reg-name" placeholder="Имя"></div>
-  <div class="auth-field"><input type="text" id="reg-surname" placeholder="Фамилия"></div>
-  <div class="auth-field"><input type="number" id="reg-age" placeholder="Возраст" min="10" max="99"></div>
-  <div class="auth-field"><input type="text" id="reg-steam" placeholder="Steam ID"></div>
-  <div class="auth-field"><input type="email" id="reg-email" placeholder="Email"></div>
-
-  <div class="auth-field pass-field">
-    <input type="password" id="reg-pass" placeholder="Пароль" class="has-eye">
-    <button type="button" class="pass-icon-btn" data-eye-for="reg-pass" title="Показать пароль">
-      <svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8S1 12 1 12z"></path><circle cx="12" cy="12" r="3"></circle></svg>
-    </button>
-  </div>
-
-  <div class="auth-field pass-field">
-    <input type="password" id="reg-pass2" placeholder="Повторите пароль" class="has-eye">
-    <button type="button" class="pass-icon-btn" data-eye-for="reg-pass2" title="Показать пароль">
-      <svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8S1 12 1 12z"></path><circle cx="12" cy="12" r="3"></circle></svg>
-    </button>
-  </div>
-
-  <div class="auth-error" id="auth-error-reg" style="display:none;"></div>
-  <button type="submit" class="auth-submit" id="auth-submit-reg">Создать аккаунт</button>
-</div>
-
-</form>
-<div class="auth-note">Авторизуясь, вы соглашаетесь с правилами проекта.</div>
-</div>
-</div>
-</div>
-
-<script src="toggle.js"></script>
+<script src="/toggle.js"></script>
+<script src="/js/login.js"></script>
 
 <script id="forum-data" type="application/json">
 [
@@ -282,7 +153,6 @@ var formBox=document.getElementById('topic-form');
 var titleEl=document.getElementById('topic-title');
 var descEl=document.getElementById('topic-desc');
 var listRoot=document.getElementById('topic-list');
-var headerLoginBtn=document.getElementById('header-login-btn');
 
 function esc(s){return String(s).replace(/[&<>"']/g,function(c){return({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c];});}
 
@@ -292,7 +162,7 @@ if(!cat){
   actionsBox.style.display='none';
   loginHint.style.display='none';
   listRoot.innerHTML=data.map(function(c){
-    return '<a class="topic-item" href="forum-topic.html?id='+encodeURIComponent(c.id)+'" style="display:block;text-decoration:none;color:inherit;"><div class="ti-title">'+esc(c.title)+'</div><div class="ti-meta">'+esc(c.desc)+'</div></a>';
+    return '<a class="topic-item" href="/forum/topic.php?id='+encodeURIComponent(c.id)+'" style="display:block;text-decoration:none;color:inherit;"><div class="ti-title">'+esc(c.title)+'</div><div class="ti-meta">'+esc(c.desc)+'</div></a>';
   }).join('');
 } else {
   document.title=cat.title+' — HARD Roleplay';
@@ -345,11 +215,9 @@ function refreshAuthUI(){
   if(isLogged){
     if(actionsBox)actionsBox.style.display='flex';
     if(loginHint)loginHint.style.display='none';
-    if(headerLoginBtn)headerLoginBtn.textContent=currentUser.nick;
   } else {
     if(actionsBox)actionsBox.style.display='none';
     if(loginHint)loginHint.style.display='flex';
-    if(headerLoginBtn)headerLoginBtn.textContent='ВОЙТИ';
   }
 }
 refreshAuthUI();
@@ -386,85 +254,10 @@ function renderTopics(){
   listRoot.innerHTML=html;
 }
 
-var modal=document.getElementById('auth-modal');
-var modalBox=document.getElementById('auth-modal-box');
-var authForm=document.getElementById('auth-form');
-var authTitle=document.getElementById('auth-title');
-var authErr=document.getElementById('auth-error');
-var authErrReg=document.getElementById('auth-error-reg');
-var tabLogin=document.getElementById('tab-login');
-var tabReg=document.getElementById('tab-register');
-var mode='login';
-
-function setMode(m){
-  mode=m;
-  if(mode==='login'){
-    modalBox.classList.remove('mode-register');
-    authTitle.textContent='Вход в аккаунт';
-    tabLogin.classList.add('active');
-    tabReg.classList.remove('active');
-  } else {
-    modalBox.classList.add('mode-register');
-    authTitle.textContent='Регистрация';
-    tabReg.classList.add('active');
-    tabLogin.classList.remove('active');
-  }
-  authErr.style.display='none';
-  authErrReg.style.display='none';
-}
-
-function openModal(){modal.classList.add('open');setMode('login');}
-function closeModal(){modal.classList.remove('open');}
-
-if(document.getElementById('open-login'))document.getElementById('open-login').addEventListener('click',openModal);
-if(headerLoginBtn)headerLoginBtn.addEventListener('click',openModal);
-document.getElementById('auth-close').addEventListener('click',closeModal);
-modal.addEventListener('click',function(e){if(e.target===modal)closeModal();});
-tabLogin.addEventListener('click',function(){setMode('login');});
-tabReg.addEventListener('click',function(){setMode('register');});
-
-document.getElementById('steam-login').addEventListener('click',function(){
-  alert('Вход через Steam появится после подключения backend на TimeWeb.');
-});
-
-document.querySelectorAll('.pass-icon-btn').forEach(function(btn){
-  btn.addEventListener('click',function(){
-    var id=btn.getAttribute('data-eye-for');
-    var input=document.getElementById(id);
-    if(!input)return;
-    if(input.type==='password'){input.type='text';btn.style.color='#e21d2f';btn.title='Скрыть пароль';}
-    else{input.type='password';btn.style.color='';btn.title='Показать пароль';}
-  });
-});
-
-authForm.addEventListener('submit',function(e){
-  e.preventDefault();
-  var users=loadUsers();
-  if(mode==='login'){
-    var nick=document.getElementById('login-nick').value.trim();
-    var pass=document.getElementById('login-pass').value;
-    if(!nick||!pass)return;
-    if(!users[nick]||users[nick].pass!==pass){authErr.textContent='Неверный логин или пароль.';authErr.style.display='block';return;}
-    localStorage.setItem(SESSION_KEY,JSON.stringify({nick:nick}));
-    currentUser={nick:nick};isLogged=true;
-  } else {
-    var name=document.getElementById('reg-name').value.trim();
-    var surname=document.getElementById('reg-surname').value.trim();
-    var age=document.getElementById('reg-age').value.trim();
-    var steam=document.getElementById('reg-steam').value.trim();
-    var email=document.getElementById('reg-email').value.trim();
-    var pass1=document.getElementById('reg-pass').value;
-    var pass2=document.getElementById('reg-pass2').value;
-    if(!name||!surname||!age||!steam||!email||!pass1||!pass2){authErrReg.textContent='Заполните все поля.';authErrReg.style.display='block';return;}
-    if(pass1!==pass2){authErrReg.textContent='Пароли не совпадают.';authErrReg.style.display='block';return;}
-    if(users[email]){authErrReg.textContent='Этот email уже зарегистрирован.';authErrReg.style.display='block';return;}
-    if(users[name]){authErrReg.textContent='Такой логин уже занят.';authErrReg.style.display='block';return;}
-    users[name]={nick:name,name:name,surname:surname,age:age,steam:steam,email:email,pass:pass1,role:'user'};
-    users[email]=users[name];saveUsers(users);
-    localStorage.setItem(SESSION_KEY,JSON.stringify({nick:name}));
-    currentUser={nick:name};isLogged=true;
-  }
-  closeModal();refreshAuthUI();renderTopics();
+var hintBtn = document.getElementById('open-login-hint');
+if(hintBtn) hintBtn.addEventListener('click', function(){
+    var btn = document.getElementById('openLoginBtn');
+    if(btn) btn.click();
 });
 })();
 </script>

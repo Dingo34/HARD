@@ -6,7 +6,7 @@ require_once '../bootstrap/view.php';
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>НАЗВАНИЕ — HARD Roleplay</title>
+    <title>Карта города — HARD Roleplay</title>
     <link rel="icon" type="image/png" href="/logo.png?v=1">
     <link rel="stylesheet" href="/pages.css">
     <link rel="stylesheet" href="/toggle.css">
@@ -20,7 +20,25 @@ require_once '../bootstrap/view.php';
     <?php renderHeader(); ?>
 
     <div class="page-container">
-        <!-- СЮДА ВСТАВЬ СОДЕРЖИМОЕ ИЗ СТАРОГО HTML (между <header> и <footer>) -->
+        <div class="page-label">04 / КАРТА ГОРОДА</div>
+        <h1 class="page-title">КАРТА<br>ХЬЮСТОНА.</h1>
+        <p class="page-description">
+            Изучи ключевые локации города — от делового центра до опасных районов. 
+            На карте отмечены важные объекты: больницы, полицейские участки, бизнесы.
+        </p>
+
+        <div class="empty-state">
+            <div class="empty-icon">🗺️</div>
+            <h3 class="empty-title">КАРТА В РАЗРАБОТКЕ</h3>
+            <p class="empty-text">Интерактивная карта города появится в ближайшее время. Следите за обновлениями в разделе «Новости».</p>
+        </div>
+
+        <div class="cards-grid" style="margin-top: 40px;">
+            <div class="content-card"><div class="card-number">ЗОНА 01</div><h3 class="card-title">ДАУНТАУН</h3><p class="card-text">Деловой центр города. Офисы, банки, рестораны.</p></div>
+            <div class="content-card"><div class="card-number">ЗОНА 02</div><h3 class="card-title">ПОРТ</h3><p class="card-text">Промышленная зона с доками. Контрабанда, чёрный рынок, склады.</p></div>
+            <div class="content-card"><div class="card-number">ЗОНА 03</div><h3 class="card-title">ПРИГОРОД</h3><p class="card-text">Спокойные жилые районы. Здесь живут обычные семьи.</p></div>
+            <div class="content-card"><div class="card-number">ЗОНА 04</div><h3 class="card-title">ГЕТТО</h3><p class="card-text">Опасный район. Банды, наркотики, перестрелки.</p></div>
+        </div>
     </div>
 
     <footer class="main-footer">
@@ -28,7 +46,6 @@ require_once '../bootstrap/view.php';
     </footer>
 
     <?php renderLogin(); ?>
-
     <script src="/toggle.js"></script>
     <script src="/js/login.js"></script>
 </body>
