@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Изменения — HARD Roleplay</title>
+<link rel="icon" type="image/png" href="logo.png?v=1">
+<link rel="stylesheet" href="pages.css">
+<link rel="stylesheet" href="toggle.css">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
+
+<style>
+:root{
+    --chg-bg:#101010; --chg-border:#363636;
+    --chg-header-bg:#141414; --chg-header-border:#303030;
+    --chg-row-bg:#0e0e0e; --chg-row-border:#2a2a2a; --chg-row-hover:#161616;
+    --chg-text:#e9e9e9; --chg-muted:#888; --chg-soft:#c7c7c7;
+    --chg-scroll-thumb:#555;
+    --chg-modal-bg:#101010; --chg-modal-border:#363636;
+    --chg-modal-header:#141414; --chg-modal-border2:#303030;
+    --chg-input-bg:#111; --chg-input-border:#2f2f2f;
+    --chg-create-bg:#1a1a1a; --chg-create-border:#2a2a2a;
+}
+body.light-theme{
+    --chg-bg:#ffffff; --chg-border:#dcdcdc;
+    --chg-header-bg:#f5f5f5; --chg-header-border:#dcdcdc;
+    --chg-row-bg:#ffffff; --chg-row-border:#e5e5e5; --chg-row-hover:#f7f7f7;
+    --chg-text:#1a1a1a; --chg-muted:#777; --chg-soft:#444;
+    --chg-scroll-thumb:#b5b5b5;
+    --chg-modal-bg:#ffffff; --chg-modal-border:#dcdcdc;
+    --chg-modal-header:#f5f5f5; --chg-modal-border2:#dcdcdc;
+    --chg-input-bg:#f5f5f5; --chg-input-border:#d5d5d5;
+    --chg-create-bg:#ffffff; --chg-create-border:#dcdcdc;
+}
+
+.changelog-wrap{ width:100%;display:flex;justify-content:center;padding:20px 20px 60px;box-sizing:border-box; }
+.changelog{
+    width:min(900px,94vw);
+    background:var(--chg-bg);
+    border:1px solid var(--chg-border);
+    border-radius:8px;
+    box-shadow:0 18px 50px rgba(0,0,0,.5);
+    overflow:hidden;display:flex;flex-direction:column;
+    font-family:'Montserrat',Arial,sans-serif;
+    color:var(--chg-text);
+    height:min(760px,84vh);
+    transition:background .35s ease, border-color .35s ease, color .35s ease;
+}
+.changelog-header{
+    min-height:62px;padding:0 24px;
+    display:flex;align-items:center;justify-content:space-between;
+    border-bottom:1px solid var(--chg-header-border);
+    background:var(--chg-header-bg);flex-shrink:0;
+}
+.changelog-title{font-size:18px;font-weight:700;letter-spacing:.04em;color:var(--chg-text);}
+.changelog-page{color:#e21d2f;font-size:12px;text-transform:uppercase;letter-spacing:.15em;}
+
+.changelog-content{
+    flex:1;padding:28px 24px 34px;
+    display:flex;flex-direction:column;gap:12px;
+    overflow-y:auto;
+    scrollbar-width:thin;
+    scrollbar-color:var(--chg-scroll-thumb) transparent;
+}
+.changelog-content::-webkit-scrollbar{ width:8px; }
+.changelog-content::-webkit-scrollbar-track{ background:transparent; }
+.changelog-content::-webkit-scrollbar-thumb{ background:var(--chg-scroll-thumb);border-radius:8px;border:none; }
+
+.log-item{
+    display:grid;grid-template-columns:100px 1fr auto 26px;
+    align-items:center;gap:18px;padding:16px 18px;
+    background:var(--chg-row-bg);border:1px solid var(--chg-row-border);
+    border-radius:8px;cursor:pointer;position:relative;
+    transition:background .2s ease, border-color .2s ease, transform .2s ease;
+    opacity:0;transform:translateY(20px);
+    animation:logAppear .55s cubic-bezier(.2,.7,.3,1) forwards;
+    flex-shrink:0;
+}
+@keyframes logAppear{ to{opacity:1;transform:translateY(0);} }
+.log-item:hover{
+    background:var(--chg-row-hover);
+    border-color:rgba(226,29,47,.5);
+    transform:translateX(3px);
+}
+.log-version{color:#e21d2f;font-size:13px;font-weight:900;letter-spacing:.06em;text-transform:uppercase;}
+.log-main{min-width:0;}
+.log-title{font-size:15px;font-weight:700;color:var(--chg-text);margin:0 0 6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.log-meta{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+
+.log-tag{
+    font-size:10px;font-weight:900;letter-spacing:.12em;
+    text-transform:uppercase;padding:3px 8px;border-radius:3px;
+    border:1px solid currentColor;
+}
+.log-tag.added{color:#2a9d4a;}
+.log-tag.fix{color:#b48a1c;}
+.log-tag.balance{color:#3b82d9;}
+.log-tag.removed{color:#e21d2f;}
+.log-tag.update{color:#9a4dd9;}
+.log-tag.event{color:#d96aa0;}
+
+.log-date{color:var(--chg-muted);font-size:11px;letter-spacing:.1em;text-transform:uppercase;white-space:nowrap;}
+.log-arrow{color:var(--chg-muted);font-size:20px;text-align:right;transition:color .2s ease, transform .2s ease;}
+.log-item:hover .log-arrow{color:#e21d2f;transform:translateX(4px);}
+
+.log-del{
+    position:absolute;top:6px;right:6px;
+    width:22px;height:22px;border-radius:50%;
+    background:rgba(226,29,47,.9);color:#fff;border:none;
+    cursor:pointer;font-size:12px;line-height:1;
+    display:flex;align-items:center;justify-content:center;z-index:5;
+    opacity:.65;transition:opacity .2s ease, transform .15s ease;
+}
+.log-del:hover{ opacity:1; transform:scale(1.1); }
+
+.changelog-footer{
+    padding:14px 20px;border-top:1px solid var(--chg-header-border);
+    color:var(--chg-muted);font-size:11px;letter-spacing:.1em;
+    text-transform:uppercase;flex-shrink:0;
+    display:flex;align-items:center;justify-content:space-between;
+    gap:12px;flex-wrap:wrap;
+}
+.btn-add-log{
+    background:#e21d2f;color:#fff;border:none;
+    border-radius:6px;padding:9px 16px;
+    font-family:inherit;font-weight:700;font-size:11px;
+    letter-spacing:.08em;cursor:pointer;text-transform:uppercase;
+}
+.btn-add-log:hover{ background:#ff2a3d; }
+
+.log-modal{
+    position:fixed;inset:0;background:rgba(0,0,0,.7);
+    display:none;align-items:center;justify-content:center;
+    z-index:9999;padding:24px;backdrop-filter:blur(6px);
+    font-family:'Montserrat',Arial,sans-serif;
+}
+.log-modal.open{display:flex;}
+
+.log-modal-box{
+    width:min(900px,94vw);max-height:88vh;
+    background:var(--chg-modal-bg);
+    border:1px solid var(--chg-modal-border);
+    border-radius:8px;box-shadow:0 18px 50px rgba(0,0,0,.5);
+    overflow:hidden;display:flex;flex-direction:column;
+    color:var(--chg-text);
+    animation:modalIn .35s cubic-bezier(.2,.7,.3,1);
+}
+@keyframes modalIn{ from{opacity:0;transform:translateY(20px) scale(.98);} to{opacity:1;transform:translateY(0) scale(1);} }
+
+.log-modal-header{
+    min-height:62px;padding:0 24px;
+    display:flex;align-items:center;justify-content:space-between;
+    border-bottom:1px solid var(--chg-modal-border2);
+    background:var(--chg-modal-header);flex-shrink:0;
+}
+.log-modal-title-bar{font-size:18px;font-weight:700;letter-spacing:.04em;color:var(--chg-text);}
+.log-modal-close{background:none;border:none;color:var(--chg-muted);font-size:22px;line-height:1;cursor:pointer;padding:4px;transition:color .15s;}
+.log-modal-close:hover{color:#e21d2f;}
+
+.log-modal-body{
+    padding:36px 46px 40px;overflow-y:auto;
+    scrollbar-width:thin;scrollbar-color:var(--chg-scroll-thumb) transparent;
+}
+.log-modal-body::-webkit-scrollbar{width:8px;}
+.log-modal-body::-webkit-scrollbar-track{background:transparent;}
+.log-modal-body::-webkit-scrollbar-thumb{background:var(--chg-scroll-thumb);border-radius:8px;border:none;}
+
+.log-num{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:12px;}
+.log-num .log-version{background:#e21d2f;color:#fff;padding:3px 8px;border-radius:3px;font-size:11px;letter-spacing:.12em;}
+.log-num .log-tag{font-size:10px;}
+.log-num .log-date{color:var(--chg-muted);margin-left:auto;}
+
+.log-modal-title{font-size:32px;line-height:1.15;font-weight:900;color:var(--chg-text);letter-spacing:-.01em;margin:0 0 22px;}
+
+.log-items{ list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px; }
+.log-items > li{
+    font-size:16px;line-height:1.8;color:var(--chg-soft);
+    padding-left:26px;position:relative;
+    opacity:0;transform:translateY(10px);
+    animation:logAppear .5s cubic-bezier(.2,.7,.3,1) forwards;
+}
+.log-items > li::before{
+    content:"";position:absolute;left:0;top:12px;
+    width:6px;height:6px;border-radius:50%;
+    background:#e21d2f;box-shadow:0 0 10px rgba(226,29,47,.7);
+}
+.log-items ul.sub{
+    list-style:none;padding:6px 0 0 0;margin:0;
+    display:flex;flex-direction:column;gap:6px;
+    padding-left:18px;
+    border-left:1px solid rgba(226,29,47,.25);
+    margin-left:6px;
+}
+.log-items ul.sub li{
+    font-size:14px;line-height:1.7;
+    color:var(--chg-muted);
+    padding-left:16px;position:relative;
+}
+.log-items ul.sub li::before{
+    content:"";position:absolute;left:0;top:9px;
+    width:5px;height:5px;border-radius:50%;
+    background:#e21d2f;opacity:.7;
+}
+.log-items li strong{ color:var(--chg-text); font-weight:900; }
+.log-items li em{ font-style:italic; }
+.log-items li code{
+    background:rgba(226,29,47,.12);color:#e21d2f;
+    padding:2px 6px;border-radius:4px;
+    font-family:Consolas,Monaco,monospace;font-size:.9em;
+}
+.log-items li a{
+    color:#e21d2f;text-decoration:none;
+    border-bottom:1px solid rgba(226,29,47,.4);
+}
+.log-items li a:hover{ border-bottom-color:#e21d2f; }
+
+.log-modal-footer{
+    padding:14px 24px;border-top:1px solid var(--chg-modal-border2);
+    color:var(--chg-muted);font-size:11px;letter-spacing:.1em;
+    text-transform:uppercase;flex-shrink:0;
+}
+
+.log-create{
+    position:fixed;inset:0;background:rgba(0,0,0,.7);
+    display:none;align-items:center;justify-content:center;
+    z-index:10000;padding:24px;backdrop-filter:blur(6px);
+    font-family:'Montserrat',Arial,sans-serif;
+}
+.log-create.open{display:flex;}
+
+.log-create-box{
+    width:min(560px,100%);max-height:90vh;
+    background:var(--chg-create-bg);
+    border:1px solid var(--chg-create-border);
+    border-radius:12px;padding:26px 28px 24px;
+    color:var(--chg-text);
+    overflow-y:auto;
+    scrollbar-width:thin;scrollbar-color:var(--chg-scroll-thumb) transparent;
+}
+.log-create-box::-webkit-scrollbar{width:8px;}
+.log-create-box::-webkit-scrollbar-track{background:transparent;}
+.log-create-box::-webkit-scrollbar-thumb{background:var(--chg-scroll-thumb);border-radius:8px;border:none;}
+
+.log-create-box h3{
+    margin:0 0 18px;font-size:18px;font-weight:900;
+    text-transform:uppercase;letter-spacing:.08em;color:var(--chg-text);
+}
+.lc-field{margin-bottom:12px;}
+.lc-field label{
+    display:block;font-size:11px;color:var(--chg-muted);
+    letter-spacing:.1em;text-transform:uppercase;
+    margin-bottom:6px;font-weight:700;
+}
+.lc-field input,
+.lc-field select,
+.lc-field textarea{
+    width:100%;box-sizing:border-box;
+    background:var(--chg-input-bg);
+    border:1px solid var(--chg-input-border);
+    color:var(--chg-text);
+    border-radius:6px;padding:11px 13px;
+    font-family:inherit;font-size:13px;outline:none;
+}
+.lc-field input:focus,
+.lc-field select:focus,
+.lc-field textarea:focus{ border-color:#e21d2f; }
+.lc-field textarea{ min-height:120px; resize:vertical; }
+
+.lc-md-hint{
+    margin-top:10px;
+    font-size:11px;
+    color:var(--chg-muted);
+    line-height:1.75;
+}
+.lc-md-hint b{ color:var(--chg-text); font-weight:700; }
+.lc-md-hint code{
+    background:rgba(226,29,47,.15);
+    color:#e21d2f;
+    padding:1px 5px;
+    border-radius:3px;
+    font-family:Consolas,Monaco,monospace;
+    font-size:.95em;
+}
+
+.lc-actions{
+    display:flex;justify-content:flex-end;gap:10px;
+    margin-top:18px;
+}
+.lc-actions .btn-cancel{
+    background:transparent;border:1px solid var(--chg-input-border);
+    color:var(--chg-muted);padding:10px 18px;border-radius:6px;
+    font-family:inherit;font-weight:700;font-size:12px;
+    cursor:pointer;letter-spacing:.08em;
+}
+.lc-actions .btn-cancel:hover{ color:#e21d2f;border-color:#e21d2f; }
+.lc-actions .btn-save{
+    background:#e21d2f;border:none;color:#fff;
+    padding:10px 18px;border-radius:6px;
+    font-family:inherit;font-weight:700;font-size:12px;
+    cursor:pointer;letter-spacing:.08em;
+}
+.lc-actions .btn-save:hover{ background:#ff2a3d; }
+
+@media(max-width:700px){
+    .log-item{grid-template-columns:1fr auto;grid-template-areas:"version arrow" "main main" "date date";gap:8px 14px;}
+    .log-version{grid-area:version;}
+    .log-arrow{grid-area:arrow;}
+    .log-main{grid-area:main;}
+    .log-date{grid-area:date;}
+    .log-modal-body{padding:24px 22px 30px;}
+    .log-modal-title{font-size:22px;}
+    .log-items > li{font-size:14px;}
+}
+</style>
+</head>
+<body>
+<div class="main-bg"></div>
+<div class="main-bg-overlay"></div>
+
+<header class="main-header">
+    <a href="index.html" class="header-left">
+        <img src="logo.png" alt="HARD Roleplay" class="header-logo">
+        <div class="header-brand">
+            <span class="brand-hard">HARD</span>
+            <span class="brand-divider">|</span>
+            <span class="brand-houston">HOUSTON</span>
+        </div>
+    </a>
+    <nav class="header-nav">
+        <a href="index.html#main" class="nav-link">Главное меню</a>
+        <a href="lore.html" class="nav-link">Лор города</a>
+        <a href="fractions.html" class="nav-link">Фракции и правила</a>
+        <a href="professions.html" class="nav-link">Профессии</a>
+        <a href="map.html" class="nav-link">Карта города</a>
+        <a href="news.html" class="nav-link">Новости</a>
+        <a href="changes.html" class="nav-link active">Изменения</a>
+        <a href="forum.html" class="nav-link">Форум</a>
+    </nav>
+    <div class="header-right">
+        <div class="theme-toggle-box"></div>
+        <a href="index.html#login" class="btn-login">ВОЙТИ</a>
+    </div>
+</header>
+
+<div class="page-container">
+    <div class="page-label">06 / ИЗМЕНЕНИЯ</div>
+    <h1 class="page-title">ИЗМЕНЕНИЯ<br>НА СЕРВЕРЕ.</h1>
+    <p class="page-description">
+        Полный список обновлений, патчей и изменений игрового баланса. Все правки фиксируются в этом журнале.
+    </p>
+</div>
+
+<div class="changelog-wrap">
+    <div class="changelog">
+        <div class="changelog-header">
+            <div class="changelog-title">HARD | HOUSTON — ЖУРНАЛ</div>
+            <div class="changelog-page">Изменения</div>
+        </div>
+        <div class="changelog-content" id="logList"></div>
+        <div class="changelog-footer">
+            <span>HARD | HOUSTON · CHANGELOG</span>
+            <button class="btn-add-log" id="btnAddLog">+ Добавить изменение</button>
+        </div>
+    </div>
+</div>
+
+<footer class="main-footer">
+    <div class="footer-brand">
+        <span>HARD</span>
+        <span class="footer-divider">|</span>
+        <span>HOUSTON</span>
+    </div>
+</footer>
+
+<div class="log-modal" id="logModal">
+    <div class="log-modal-box">
+        <div class="log-modal-header">
+            <div class="log-modal-title-bar">HARD | HOUSTON — ЗАПИСЬ</div>
+            <button class="log-modal-close" id="logModalClose">✕</button>
+        </div>
+        <div class="log-modal-body">
+            <div class="log-num">
+                <span class="log-version" id="modalVersion"></span>
+                <span class="log-tag" id="modalTag"></span>
+                <span class="log-date" id="modalDate"></span>
+            </div>
+            <h2 class="log-modal-title" id="modalTitle"></h2>
+            <ul class="log-items" id="modalItems"></ul>
+        </div>
+        <div class="log-modal-footer">HARD | HOUSTON · OFFICIAL CHANGELOG</div>
+    </div>
+</div>
+
+<div class="log-create" id="createModal">
+    <div class="log-create-box">
+        <h3>Новое изменение</h3>
+        <div class="lc-field">
+            <label>Версия</label>
+            <input type="text" id="lcVersion" placeholder="v1.4.0">
+        </div>
+        <div class="lc-field">
+            <label>Категория</label>
+            <select id="lcTag">
+                <option value="added">Добавлено</option>
+                <option value="fix">Исправлено</option>
+                <option value="balance">Баланс</option>
+                <option value="update">Обновление</option>
+                <option value="removed">Удалено</option>
+                <option value="event">Ивент</option>
+            </select>
+        </div>
+        <div class="lc-field">
+            <label>Дата</label>
+            <input type="text" id="lcDate" placeholder="16 сентября 2026">
+        </div>
+        <div class="lc-field">
+            <label>Заголовок</label>
+            <input type="text" id="lcTitle" placeholder="Новый жилой район">
+        </div>
+        <div class="lc-field">
+            <label>Изменения (по одному пункту на строку)</label>
+            <textarea id="lcItems" placeholder="Исправлена ошибка с исчезновением личных машин после рестарта.&#10;  - добавлен новый автосалон&#10;  - исправлен баг с тюнингом&#10;Починено отображение зарплат сотрудникам фракций.&#10;Устранён баг с бесконечной загрузкой при входе в бизнес."></textarea>
+            <div class="lc-md-hint">
+                <b>Как писать:</b><br>
+                • Каждая строка = отдельный пункт.<br>
+                • <code>**жирный**</code>, <code>*курсив*</code>, <code>`код`</code>, <code>[ссылка](url)</code> — форматирование.<br>
+                • Строка, начинающаяся с <code>-</code> или пробела, становится <b>подпунктом</b>.
+            </div>
+        </div>
+        <div class="lc-actions">
+            <button class="btn-cancel" id="lcCancel">Отмена</button>
+            <button class="btn-save" id="lcSave">Опубликовать</button>
+        </div>
+    </div>
+</div>
+
+<script src="toggle.js"></script>
+
+<script id="changes-default" type="application/json">
+[
+    {"version":"v1.3.0","tag":"added","tagText":"Обновление","date":"15 сентября 2026","title":"Крупное обновление: транспорт и автосалон","items":["Добавлено **12 новых моделей** автомобилей в городской автосалон.","  - переработана система тюнинга","  - добавлено 40+ деталей","Добавлен автомагазин запчастей в Промзоне.","Появилась возможность арендовать мотоциклы на сутки."]},
+    {"version":"v1.2.4","tag":"fix","tagText":"Исправлено","date":"14 сентября 2026","title":"Хотфикс после обновления","items":["Исправлена ошибка с исчезновением личных машин после рестарта.","  - добавлен новый автосалон","  - исправлен баг с тюнингом","Починено отображение зарплат сотрудникам фракций.","Устранён баг с бесконечной загрузкой при входе в бизнес."]},
+    {"version":"v1.2.0","tag":"balance","tagText":"Баланс","date":"13 сентября 2026","title":"Экономика и работа","items":["Снижена прибыль с **фермы на 15%**.","Повышена зарплата полиции и медиков.","Изменены цены на продукты в магазинах 24/7.","Уменьшен налог на малый бизнес."]},
+    {"version":"v1.0.0","tag":"added","tagText":"Запуск","date":"9 сентября 2026","title":"Старт проекта HARD | Houston","items":["Открытие сервера для первых игроков.","Добавлены базовые фракции: полиция, скорая, пожарная.","Запущена экономика и система трудоустройства."]}
+]
+</script>
+
+<script>
+(function(){
+"use strict";
+
+const STORAGE_KEY = 'hh_changelog';
+const DEFAULT_DATA = JSON.parse(document.getElementById('changes-default').textContent);
+
+function loadData(){
+    try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if(raw) return JSON.parse(raw);
+    } catch(e){}
+    return DEFAULT_DATA.slice();
+}
+function saveData(arr){ localStorage.setItem(STORAGE_KEY, JSON.stringify(arr)); }
+
+const listRoot = document.getElementById('logList');
+
+function esc(s){
+    return String(s).replace(/[&<>"']/g, c => ({
+        '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+    })[c]);
+}
+
+function mdInline(text){
+    let t = esc(text);
+    t = t.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+    t = t.replace(/(^|[^*])\*([^*\n]+)\*(?!\*)/g, '$1<em>$2</em>');
+    t = t.replace(/`([^`]+)`/g, '<code>$1</code>');
+    t = t.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>');
+    return t;
+}
+function mdList(items){
+    let html = '';
+    let subOpen = false;
+    items.forEach(function(raw){
+        const line = String(raw);
+        const isSub = /^\s{1,}/.test(line);
+        const clean = line.replace(/^\s*[-*]?\s*/, '').trim();
+        if(!clean) return;
+
+        if(isSub){
+            if(!subOpen){ html += '<ul class="sub">'; subOpen = true; }
+            html += '<li>' + mdInline(clean) + '</li>';
+        } else {
+            if(subOpen){ html += '</ul>'; subOpen = false; }
+            html += '<li>' + mdInline(clean) + '</li>';
+        }
+    });
+    if(subOpen) html += '</ul>';
+    return html;
+}
+
+function render(){
+    const data = loadData();
+    let html = '';
+    data.forEach((e, i) => {
+        const tag = e.tag || 'update';
+        const tagText = e.tagText || 'Обновление';
+        const delay = Math.min(i * 0.05, 1).toFixed(2);
+        html +=
+            '<div class="log-item" data-idx="'+i+'" style="animation-delay:'+delay+'s">'+
+                '<button class="log-del" data-del="'+i+'" title="Удалить">×</button>'+
+                '<span class="log-version">'+esc(e.version||'')+'</span>'+
+                '<div class="log-main">'+
+                    '<div class="log-title">'+esc(e.title||'Без названия')+'</div>'+
+                    '<div class="log-meta">'+
+                        '<span class="log-tag '+esc(tag)+'">'+esc(tagText)+'</span>'+
+                    '</div>'+
+                '</div>'+
+                '<span class="log-date">'+esc(e.date||'')+'</span>'+
+                '<span class="log-arrow">›</span>'+
+            '</div>';
+    });
+    listRoot.innerHTML = html;
+
+    listRoot.querySelectorAll('.log-item').forEach(item => {
+        item.addEventListener('click', function(ev){
+            if(ev.target.classList.contains('log-del')) return;
+            openModal(Number(item.dataset.idx));
+        });
+    });
+    listRoot.querySelectorAll('.log-del').forEach(btn => {
+        btn.addEventListener('click', function(ev){
+            ev.stopPropagation();
+            if(!confirm('Удалить эту запись?')) return;
+            const idx = Number(btn.dataset.del);
+            const arr = loadData();
+            arr.splice(idx, 1);
+            saveData(arr);
+            render();
+        });
+    });
+}
+
+const modal       = document.getElementById('logModal');
+const modalClose  = document.getElementById('logModalClose');
+const modalVersion= document.getElementById('modalVersion');
+const modalTag    = document.getElementById('modalTag');
+const modalDate   = document.getElementById('modalDate');
+const modalTitle  = document.getElementById('modalTitle');
+const modalItems  = document.getElementById('modalItems');
+
+function openModal(i){
+    const data = loadData();
+    const e = data[i]; if(!e) return;
+    const tag = e.tag || 'update';
+    const tagText = e.tagText || 'Обновление';
+
+    modalVersion.textContent = e.version || '';
+    modalTag.textContent = tagText;
+    modalTag.className = 'log-tag ' + tag;
+    modalDate.textContent = e.date || '';
+    modalTitle.textContent = e.title || '';
+
+    modalItems.innerHTML = mdList(e.items || []);
+
+    modal.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    document.querySelector('.log-modal-body').scrollTop = 0;
+}
+function closeModal(){
+    modal.classList.remove('open');
+    document.body.style.overflow = '';
+}
+modalClose.addEventListener('click', closeModal);
+modal.addEventListener('click', e => { if(e.target === e.currentTarget) closeModal(); });
+document.addEventListener('keydown', e => { if(e.key === 'Escape') closeModal(); });
+
+const createModal = document.getElementById('createModal');
+const btnAdd = document.getElementById('btnAddLog');
+const btnCancel = document.getElementById('lcCancel');
+const btnSave = document.getElementById('lcSave');
+
+btnAdd.addEventListener('click', () => {
+    const d = new Date();
+    const months = ['января','февраля','марта','апреля','мая','июня','июля','августа','сентября','октября','ноября','декабря'];
+    document.getElementById('lcDate').value = d.getDate()+' '+months[d.getMonth()]+' '+d.getFullYear();
+    createModal.classList.add('open');
+    document.body.style.overflow = 'hidden';
+});
+btnCancel.addEventListener('click', () => {
+    createModal.classList.remove('open');
+    document.body.style.overflow = '';
+});
+createModal.addEventListener('click', e => { if(e.target === createModal) btnCancel.click(); });
+
+btnSave.addEventListener('click', () => {
+    const version = document.getElementById('lcVersion').value.trim();
+    const tag = document.getElementById('lcTag').value;
+    const date = document.getElementById('lcDate').value.trim();
+    const title = document.getElementById('lcTitle').value.trim();
+    const itemsRaw = document.getElementById('lcItems').value;
+
+    if(!title){ alert('Введите заголовок'); return; }
+
+    const tagTextMap = {
+        added:'Добавлено', fix:'Исправлено', balance:'Баланс',
+        update:'Обновление', removed:'Удалено', event:'Ивент'
+    };
+    const items = itemsRaw.split('\n').map(s => s.replace(/\s+$/,'')).filter(s => s.trim());
+
+    const arr = loadData();
+    arr.unshift({version, tag, tagText: tagTextMap[tag] || 'Обновление', date, title, items});
+    saveData(arr);
+
+    ['lcVersion','lcDate','lcTitle','lcItems'].forEach(id => document.getElementById(id).value = '');
+    createModal.classList.remove('open');
+    document.body.style.overflow = '';
+    render();
+});
+
+render();
+})();
+</script>
+</body>
+</html>

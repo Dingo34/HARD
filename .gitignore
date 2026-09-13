@@ -1,0 +1,22 @@
+# ============ СЕКРЕТНЫЕ ДАННЫЕ ============ё
+config.php
+
+# Загруженные пользователями файлы
+uploads/
+*.log
+
+# Системные файлы
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE
+.vscode/
+.idea/
+
+# Node_modules (если появится)
+node_modules/
+
+# Временные файлы
+*.tmp
+*.bak
